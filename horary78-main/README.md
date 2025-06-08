@@ -45,3 +45,4 @@ wrap the backend executable and built frontend into an `.appx` package.
 
    Sign the package with your code signing certificate and submit it to the
    Microsoft Store for distribution.
+For desktop distribution using Electron, see [docs/electron.md](docs/electron.md).
