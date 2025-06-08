@@ -10,6 +10,27 @@ From the repository root run:
 docker build -t horary-app .
 ```
 
+### Node Setup for the Frontend
+
+Install Node.js and npm on your host machine if you haven't already. On Ubuntu-based systems you can run:
+
+```bash
+sudo apt-get update && sudo apt-get install -y nodejs npm
+```
+
+Then install the project dependencies inside the `frontend/` directory:
+
+```bash
+cd frontend
+npm install
+```
+
+Before packaging the application or running the Electron version, build the production assets:
+
+```bash
+npm run build
+```
+
 ## Run the Container
 
 After building the image, start the application with:
