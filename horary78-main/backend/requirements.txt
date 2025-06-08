@@ -14,9 +14,6 @@ pytz==2023.3
 requests==2.31.0
 python-dateutil==2.8.2
 
-# License system - cryptographic security
-cryptography==41.0.7
-
 # Production deployment
 gunicorn==21.2.0
 

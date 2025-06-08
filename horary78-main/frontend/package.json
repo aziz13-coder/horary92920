@@ -8,7 +8,6 @@
     "dev": "vite --mode development",
     "dev:backend": "cd ../backend && python app.py",
     "build": "vite build",
-    "test:license": "python ../backend/license_generator.py",
     "clean": "rimraf dist node_modules/.vite",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext js,jsx --fix",

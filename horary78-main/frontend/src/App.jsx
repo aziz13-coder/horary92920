@@ -121,14 +121,6 @@ class HoraryAPI {
   static async getVersion() {
     return this.request('/api/version');
   }
-
-  static async getLicenseStatus() {
-    return this.request('/api/license/status');
-  }
-
-  static async getLicenseFeatures() {
-    return this.request('/api/license/features');
-  }
 }
 
 // Local Storage Service (Enhanced)
@@ -352,7 +344,6 @@ const HoraryAstrologyApp = () => {
   const [currentChart, setCurrentChart] = useState(null);
   const [notes, setNotes] = useState({});
   const [apiStatus, setApiStatus] = useState('checking');
-  const [licenseInfo, setLicenseInfo] = useState(null);
 
   // Initialize data
   useEffect(() => {
@@ -366,11 +357,6 @@ const HoraryAstrologyApp = () => {
     checkApiHealth();
   }, []);
 
-  useEffect(() => {
-    if (apiStatus === 'connected') {
-      fetchLicenseStatus();
-    }
-  }, [apiStatus]);
 
   const checkApiHealth = async () => {
     try {
@@ -382,22 +368,6 @@ const HoraryAstrologyApp = () => {
     }
   };
 
-  const fetchLicenseStatus = async () => {
-    try {
-      const status = await HoraryAPI.getLicenseStatus();
-      setLicenseInfo(status.license);
-      if (window.horaryAPI && window.horaryAPI.license) {
-        Object.assign(window.horaryAPI.license, {
-          isValid: status.license.valid,
-          expiryDate: status.license.expiryDate,
-          licensedTo: status.license.licensedTo,
-          features: Object.keys(status.license.features || {})
-        });
-      }
-    } catch (error) {
-      console.error('Failed to fetch license status:', error);
-    }
-  };
 
   const toggleDarkMode = () => {
     const newMode = !darkMode;
@@ -485,7 +455,6 @@ const HoraryAstrologyApp = () => {
             setCurrentView={setCurrentView}
             apiStatus={apiStatus}
             onRefreshApi={checkApiHealth}
-            licenseInfo={licenseInfo}
           />
         )}
       </main>
@@ -3796,7 +3765,7 @@ const NotebookView = ({ charts, notes, setNotes, darkMode, setCurrentChart, setC
 };
 
 // Enhanced Settings Component
-const Settings = ({ darkMode, toggleDarkMode, setCurrentView, apiStatus, onRefreshApi, licenseInfo }) => {
+const Settings = ({ darkMode, toggleDarkMode, setCurrentView, apiStatus, onRefreshApi }) => {
   const [apiVersion, setApiVersion] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -3978,42 +3947,6 @@ const Settings = ({ darkMode, toggleDarkMode, setCurrentView, apiStatus, onRefre
         )}
       </div>
 
-      {licenseInfo && (
-        <div className={`${cardBg} border rounded-2xl p-6 mb-8`}>
-          <h3 className="text-lg font-semibold mb-4 flex items-center">
-            <Shield className="w-5 h-5 mr-2" />
-            License Information
-          </h3>
-          <div className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
-            <div className="flex justify-between">
-              <span>Status</span>
-              <span>{licenseInfo.valid ? 'Valid' : 'Invalid'}</span>
-            </div>
-            {licenseInfo.licensedTo && (
-              <div className="flex justify-between">
-                <span>Licensed To</span>
-                <span>{licenseInfo.licensedTo}</span>
-              </div>
-            )}
-            {licenseInfo.licenseType && (
-              <div className="flex justify-between">
-                <span>License Type</span>
-                <span>{licenseInfo.licenseType}</span>
-              </div>
-            )}
-            {licenseInfo.expiryDate && (
-              <div className="flex justify-between">
-                <span>Expiry Date</span>
-                <span>{licenseInfo.expiryDate}</span>
-              </div>
-            )}
-            <div className="flex justify-between">
-              <span>Days Remaining</span>
-              <span>{licenseInfo.daysRemaining ?? 0}</span>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="space-y-8">
         {settingsOptions.map((section, sectionIndex) => (
